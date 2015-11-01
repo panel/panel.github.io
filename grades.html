@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Grade Grid</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.5/yeti/bootstrap.min.css">
+
+	<style>
+		td:first-child {
+			width:35%;
+		}
+
+		td:last-child {
+			width: 65%;
+			font-weight: 700;
+		}
+
+		td {
+			text-align: right;
+			padding: 1em;
+		}
+
+		table {
+			border-bottom: 1px solid black;
+			border-right: 1px solid black;
+		}
+	</style>
+</head>
+<body ng-app="graderApp">
+	<div class="container-fluid" ng-controller="grades">
+		<h1>Abby's Points</h1>
+		<form>
+			<div class="form-group">
+				<label for="points">Points</label>
+				<input type="number" id="points" ng-model="points">
+			</div>
+		</form>
+
+		<table class="col-xs-2" ng-repeat="obj in grid">
+			<tr>
+				<td>{{obj.points}}</td>
+				<td>{{obj.percentage | number}}</td>
+			</tr>
+		</table>
+	</div>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.0-beta.1/angular.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.min.js"></script>
+	<script>
+angular.module('graderApp', [])
+	.controller('grades', function ($scope) {
+		$scope.points = 30;
+		$scope.$watch('points', setGrid);
+
+		setGrid();
+
+		function setGrid() {
+			$scope.grid = _.reduce(_.range(0, $scope.points, .5), function (acc, point) {
+				acc.push({
+					points: point,
+					percentage: (point/$scope.points) * 100
+				});
+				return acc;
+			}, []);
+		}
+	});
+	</script>
+</body>
+</html>
